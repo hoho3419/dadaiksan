@@ -31,5 +31,5 @@ public class Shop {
     private String lon;
 
     private String shopDesc;
-    
+
 }
