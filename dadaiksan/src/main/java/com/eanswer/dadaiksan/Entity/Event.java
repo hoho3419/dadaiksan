@@ -36,7 +36,7 @@ public class Event {
 
     private String eventImg;
 
-//    @OneToMany(mappedBy = "event")
-//    private List<Comment> comments; // 이벤트 게시글의 댓글 리스트
+    @OneToMany(mappedBy = "event")
+    private List<Comment> comments;
 
 }

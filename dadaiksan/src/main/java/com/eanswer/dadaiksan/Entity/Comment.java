@@ -44,7 +44,7 @@ public class Comment {
     @JoinColumn(name = "Member",nullable = false)
     private Member member;
 
-//    @ManyToOne
-//    @JoinColumn(name = "Event",nullable = false)
-//    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "Event",nullable = false)
+    private Event event;
 }
