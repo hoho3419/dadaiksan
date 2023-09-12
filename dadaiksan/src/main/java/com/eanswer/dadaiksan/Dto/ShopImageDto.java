@@ -11,5 +11,4 @@ import lombok.*;
 public class ShopImageDto {
     private Long id;
     private String imgUrl;
-    private Long shopId;
 }

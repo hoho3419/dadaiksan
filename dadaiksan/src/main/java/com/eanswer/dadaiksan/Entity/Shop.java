@@ -31,7 +31,5 @@ public class Shop {
     private String lon;
 
     private String shopDesc;
-
-    @OneToMany(mappedBy = "shop")
-    private List<ShopImage> shopImages;
+    
 }

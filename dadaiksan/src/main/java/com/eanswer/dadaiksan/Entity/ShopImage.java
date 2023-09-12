@@ -20,7 +20,4 @@ public class ShopImage {
 
     private String imgUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "shop")
-    private Shop shop;
 }
