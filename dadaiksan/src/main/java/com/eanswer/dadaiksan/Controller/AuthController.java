@@ -32,14 +32,12 @@ public class AuthController {
     public ResponseEntity<TokenDto> login(@RequestBody MemberRequestDto memberRequestDto) {
         return ResponseEntity.ok(authService.login(memberRequestDto));
     }
-//
-//    /**
-//     * 재발급
-//     */
-//    @PostMapping("/reissue")
-//    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-//        return ResponseEntity.ok(authService.reissue(tokenRequestDto));
-//    }
+
+    @PostMapping("/refresh-token")
+    public TokenDto refreshToken(@RequestParam String refreshToken) {
+        TokenDto newAccessToken = authService.refreshToken(refreshToken);
+        return newAccessToken;
+    }
 
 //    /**
 //     * 이메일이 데이터베이스에 존재하는지 확인
