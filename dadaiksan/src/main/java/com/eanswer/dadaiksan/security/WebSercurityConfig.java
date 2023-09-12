@@ -42,6 +42,7 @@ public class WebSercurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception").permitAll()
+                .antMatchers("/thymeleaf/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
