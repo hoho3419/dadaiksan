@@ -5,15 +5,14 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Like")
+@Table(name = "Likes")
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Like {
-    @Column
+public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

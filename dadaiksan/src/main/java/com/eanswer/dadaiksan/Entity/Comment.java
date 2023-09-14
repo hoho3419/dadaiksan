@@ -18,7 +18,6 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
     private String nickName;
 
     @Column(nullable = false)
@@ -27,10 +26,8 @@ public class Comment {
     @Column(nullable = false)
     private String imgUrl;
 
-    @Column
     private String contents;
 
-    @Column
     private Date regDate;
 
     @Column(nullable = false)

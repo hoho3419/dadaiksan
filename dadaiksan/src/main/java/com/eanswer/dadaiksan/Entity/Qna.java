@@ -20,18 +20,14 @@ public class Qna {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
     private String title;
 
-    @Column
     private String contents;
 
     @Column(nullable = false)
     private String imgUrl;
 
-    @Column
     private boolean isOpen;
 
-    @Column
     private Date regDate;
 }

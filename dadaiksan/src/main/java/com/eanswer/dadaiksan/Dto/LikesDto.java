@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LikeDto {
+public class LikesDto {
     private Long id;
     private Long memberId;
     private Long articleId;

@@ -11,5 +11,8 @@
         <module name="dadaiksan.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dadaiksan" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

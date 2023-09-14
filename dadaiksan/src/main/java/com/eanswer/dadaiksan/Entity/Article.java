@@ -21,19 +21,16 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Builder.Default
     private int viewCount = 0;
 
-    @Column
+    @Builder.Default
     private int likeCount = 0;
 
-    @Column
     private String articleType;
 
-    @Column
     private String title;
 
-    @Column
     private String contents;
 
     @Column(nullable = false)
@@ -42,13 +39,12 @@ public class Article {
     @Column(nullable = false)
     private String vidUrl;
 
-    @Column
+    @Builder.Default
     private boolean status = true;
 
-    @Column
+    @Builder.Default
     private boolean isAdmin = false;
 
-    @Column
     private LocalDateTime regDate;
 
     @Column(nullable = false)
@@ -58,5 +54,5 @@ public class Article {
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "article")
-    private List<Like> like;
+    private List<Likes> like;
 }
