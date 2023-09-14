@@ -38,8 +38,13 @@ public class AuthService {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");
         }
 
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
+        if (memberRequestDto.getNickname().equals("admin")) {
+            Member member = memberRequestDto.toAdmin(passwordEncoder);
+            return MemberResponseDto.of(memberRepository.save(member));
+        } else {
+            Member member = memberRequestDto.toMember(passwordEncoder);
+            return MemberResponseDto.of(memberRepository.save(member));
+        }
     }
 
     @Transactional

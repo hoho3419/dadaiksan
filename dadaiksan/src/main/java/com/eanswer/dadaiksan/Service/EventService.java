@@ -4,6 +4,7 @@ import com.eanswer.dadaiksan.Dto.EventDto;
 import com.eanswer.dadaiksan.Entity.Event;
 import com.eanswer.dadaiksan.Entity.Member;
 import com.eanswer.dadaiksan.Repository.EventRepository;
+import com.eanswer.dadaiksan.constant.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,13 @@ public class EventService {
 
     public boolean newEvent(EventDto eventDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
-        authService.validateTokenAndGetUser(request, userDetails);
+        Member member = authService.validateTokenAndGetUser(request, userDetails);
+        Authority isAdmin = member.getAuthority();
+        System.out.println(isAdmin);
+
+        if (!isAdmin.equals("ROLE_ADMIN")) {
+            return false;
+        }
 
         Event event = new Event();
 
@@ -51,7 +58,14 @@ public class EventService {
     @Transactional
     public boolean updateEvent(Long id, EventDto eventDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
-        authService.validateTokenAndGetUser(request, userDetails);
+        Member member = authService.validateTokenAndGetUser(request, userDetails);
+        Authority isAdmin = member.getAuthority();
+        System.out.println(isAdmin);
+
+        if (!isAdmin.equals("ROLE_ADMIN")) {
+            return false;
+        }
+
         Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
@@ -72,17 +86,23 @@ public class EventService {
     @Transactional
     public boolean deleteEvent(Long id, HttpServletRequest request, UserDetails userDetails) {
 
-        authService.validateTokenAndGetUser(request, userDetails);
+        Member member = authService.validateTokenAndGetUser(request, userDetails);
+        Authority isAdmin = member.getAuthority();
+        System.out.println(isAdmin);
+
+        if (!isAdmin.equals("ROLE_ADMIN")) {
+            return false;
+        }
+
         Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
         eventRepository.delete(event);
 
         return true;
     }
 
-    public List<EventDto> getAllEvents(HttpServletRequest request, UserDetails userDetails) {
-        authService.validateTokenAndGetUser(request, userDetails);
-        List<EventDto> eventDtos = new ArrayList<>();
+    public List<EventDto> getAllEvents() {
 
+        List<EventDto> eventDtos = new ArrayList<>();
         List<Event> events = eventRepository.findAll();
 
         for (Event event : events) {
@@ -104,8 +124,8 @@ public class EventService {
         return eventDtos;
     }
 
-    public EventDto readEvent(Long id, HttpServletRequest request, UserDetails userDetails) {
-        authService.validateTokenAndGetUser(request,userDetails);
+    public EventDto readEvent(Long id) {
+
         Event event = eventRepository.findById(id).orElseThrow(()->new RuntimeException("이벤트가 없습니다."));
 
         EventDto eventDto = new EventDto();
