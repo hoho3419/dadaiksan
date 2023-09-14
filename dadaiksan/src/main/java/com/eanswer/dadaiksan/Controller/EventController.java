@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/event")
@@ -23,7 +24,19 @@ public class EventController {
     public ResponseEntity<?> newEvent(@RequestBody EventDto eventDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException {
         boolean isCreate = eventService.newEvent(eventDto, request, userDetails);
         if (isCreate) return new ResponseEntity<>("이벤트 등록 성공", HttpStatus.OK);
-        else return new ResponseEntity<>("이벤트 등록 실패", HttpStatus.OK);
+        else return new ResponseEntity<>("이벤트 등록 실패", HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/readAll") // 이벤트 목록
+    public ResponseEntity<List<EventDto>> getAllEvents(HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        List<EventDto> events = eventService.getAllEvents(request, userDetails);
+        return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("/readEvent/{id}") // 조회
+    public ResponseEntity<EventDto> readEvent(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
+        EventDto eventDto = eventService.readEvent(id, request, userDetails);
+        return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
 
     @PostMapping("/updateEvent/{id}") // 수정
@@ -36,5 +49,12 @@ public class EventController {
         } catch (IllegalStateException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/deleteEvent/{id}") // 삭제
+    public ResponseEntity<?> deleteEvent(@PathVariable("id") Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        boolean isDeleted = eventService.deleteEvent(id, request, userDetails);
+        if (isDeleted) return new ResponseEntity<>("이벤트 삭제 성공", HttpStatus.OK);
+        else return new ResponseEntity<>("이벤트 삭제 실패", HttpStatus.NO_CONTENT);
     }
 }

@@ -2,6 +2,7 @@ package com.eanswer.dadaiksan.Dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,7 +17,7 @@ public class EventDto {
     private String finDate;
     private String eventName;
     private String eventContents;
-    private Date regDate;
+    private LocalDateTime regDate;
     private String eventImg;
 
 }
