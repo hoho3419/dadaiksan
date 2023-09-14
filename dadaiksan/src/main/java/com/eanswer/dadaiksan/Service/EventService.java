@@ -10,10 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +47,79 @@ public class EventService {
         event.setEventImg(eventDto.getEventImg());
         Event saveEvent = eventRepository.save(event);
         return saveEvent != null;
+    }
+    @Transactional
+    public boolean updateEvent(Long id, EventDto eventDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
+        authService.validateTokenAndGetUser(request, userDetails);
+        Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
+        Date startDate = dateFormat.parse(eventDto.getStartDate());
+        Date finDate = dateFormat.parse(eventDto.getFinDate());
+
+        event.setStartDate(startDate);
+        event.setFinDate(finDate);
+        event.setEventName(eventDto.getEventName());
+        event.setEventContents(eventDto.getEventContents());
+        event.setRegDate(LocalDateTime.now());
+        event.setEventImg(eventDto.getEventImg());
+        Event updateEvent = eventRepository.save(event);
+
+        return updateEvent != null;
+    }
+
+    @Transactional
+    public boolean deleteEvent(Long id, HttpServletRequest request, UserDetails userDetails) {
+
+        authService.validateTokenAndGetUser(request, userDetails);
+        Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
+        eventRepository.delete(event);
+
+        return true;
+    }
+
+    public List<EventDto> getAllEvents(HttpServletRequest request, UserDetails userDetails) {
+        authService.validateTokenAndGetUser(request, userDetails);
+        List<EventDto> eventDtos = new ArrayList<>();
+
+        List<Event> events = eventRepository.findAll();
+
+        for (Event event : events) {
+            EventDto eventDto = new EventDto();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+            String startDateStr = dateFormat.format(event.getStartDate());
+            String finDateStr = dateFormat.format(event.getFinDate());
+
+            eventDto.setId(event.getId());
+            eventDto.setEventName(event.getEventName());
+            eventDto.setEventContents(event.getEventContents());
+            eventDto.setStartDate(startDateStr);
+            eventDto.setFinDate(finDateStr);
+            eventDto.setRegDate(event.getRegDate());
+            eventDto.setEventImg(event.getEventImg());
+            eventDtos.add(eventDto);
+        }
+
+        return eventDtos;
+    }
+
+    public EventDto readEvent(Long id, HttpServletRequest request, UserDetails userDetails) {
+        authService.validateTokenAndGetUser(request,userDetails);
+        Event event = eventRepository.findById(id).orElseThrow(()->new RuntimeException("이벤트가 없습니다."));
+
+        EventDto eventDto = new EventDto();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
+        String startDateStr = dateFormat.format(event.getStartDate());
+        String finDateStr = dateFormat.format(event.getFinDate());
+        eventDto.setId(event.getId());
+        eventDto.setEventName(event.getEventName());
+        eventDto.setEventContents(event.getEventContents());
+        eventDto.setStartDate(startDateStr);
+        eventDto.setFinDate(finDateStr);
+        eventDto.setRegDate(event.getRegDate());
+        eventDto.setEventImg(event.getEventImg());
+
+        return eventDto;
     }
 }
