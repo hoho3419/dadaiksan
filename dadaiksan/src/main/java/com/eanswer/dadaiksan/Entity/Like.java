@@ -17,12 +17,11 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column
+
     @ManyToOne
     @JoinColumn(name = "Artcle")
     private Article article;
-
-    @Column
+    
     @OneToOne
     @JoinColumn(name = "Member")
     private Member member;
