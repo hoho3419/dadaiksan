@@ -12,8 +12,8 @@ import java.util.Date;
 
 public class EventDto {
     private Long id;
-    private Date startDate;
-    private Date finDate;
+    private String startDate;
+    private String finDate;
     private String eventName;
     private String eventContents;
     private Date regDate;
