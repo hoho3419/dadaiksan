@@ -3,6 +3,7 @@ package com.eanswer.dadaiksan.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class Article {
     private boolean isAdmin = false;
 
     @Column
-    private Date regDate;
+    private LocalDateTime regDate;
 
     @Column(nullable = false)
     private Date updateDate;

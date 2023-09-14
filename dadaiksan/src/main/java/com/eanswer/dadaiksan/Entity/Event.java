@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class Event {
     private String eventContents;
 
     @Column(nullable = false)
-    private Date regDate;
+    private LocalDateTime regDate;
 
     private String eventImg;
 
