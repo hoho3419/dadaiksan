@@ -3,6 +3,7 @@ package com.eanswer.dadaiksan.Dto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -23,6 +24,6 @@ public class ArticleDto {
     private String vidUrl;
     private boolean status = true;
     private boolean isAdmin = false;
-    private Date regDate;
-    private Date updateDate;
+    private LocalDateTime regDate;
+    private String updateDate;
 }

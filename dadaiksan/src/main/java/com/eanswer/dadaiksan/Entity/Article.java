@@ -48,7 +48,7 @@ public class Article {
     private LocalDateTime regDate;
 
     @Column(nullable = false)
-    private Date updateDate;
+    private String updateDate;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
