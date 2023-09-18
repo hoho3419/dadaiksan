@@ -8,6 +8,7 @@ import com.eanswer.dadaiksan.Repository.MemberRepository;
 import com.eanswer.dadaiksan.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Service
@@ -34,16 +36,26 @@ public class AuthService {
 
     @Transactional
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
-        }
+        try {
+            if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
+                throw new RuntimeException("이미 가입되어 있는 유저입니다");
+            }
 
-        if (memberRequestDto.getNickname().equals("admin")) {
-            Member member = memberRequestDto.toAdmin(passwordEncoder);
-            return MemberResponseDto.of(memberRepository.save(member));
-        } else {
-            Member member = memberRequestDto.toMember(passwordEncoder);
-            return MemberResponseDto.of(memberRepository.save(member));
+            if (memberRequestDto.getNickname().equals("admin")) {
+                Member member = memberRequestDto.toAdmin(passwordEncoder);
+                return MemberResponseDto.of(memberRepository.save(member));
+            } else {
+                Member member = memberRequestDto.toMember(passwordEncoder);
+                return MemberResponseDto.of(memberRepository.save(member));
+            }
+        }catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
+                // SQLIntegrityConstraintViolationException이 발생한 경우
+                // 이미 admin 계정이 있음을 의미하는 메시지를 반환합니다.
+                throw new RuntimeException("이미 admin 계정이 있습니다");
+            }
+            // 다른 DataIntegrityViolationException의 경우 기본 오류 메시지를 반환합니다.
+            throw new RuntimeException("데이터베이스 오류: " + e.getMessage());
         }
     }
 
