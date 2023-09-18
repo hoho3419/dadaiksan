@@ -21,34 +21,32 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Builder.Default
+    @Column(name = "view_count", columnDefinition = "int default 0")
     private int viewCount = 0;
 
-    @Builder.Default
+    @Column(name = "like_count", columnDefinition = "int default 0")
     private int likeCount = 0;
 
     private String articleType;
 
+    @Column(nullable = false)
     private String title;
 
     private String contents;
 
-    @Column(nullable = false)
     private String imgUrl;
 
-    @Column(nullable = false)
     private String vidUrl;
 
-    @Builder.Default
+    @Column(name = "status", columnDefinition = "boolean default 1")
     private boolean status = true;
 
-    @Builder.Default
+    @Column(name = "is_admin", columnDefinition = "boolean default 0")
     private boolean isAdmin = false;
 
     private LocalDateTime regDate;
 
-    @Column(nullable = false)
-    private String updateDate;
+    private LocalDateTime updateDate;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;

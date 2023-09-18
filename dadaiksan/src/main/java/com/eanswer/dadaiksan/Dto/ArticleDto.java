@@ -25,5 +25,5 @@ public class ArticleDto {
     private boolean status = true;
     private boolean isAdmin = false;
     private LocalDateTime regDate;
-    private String updateDate;
+    private LocalDateTime updateDate;
 }

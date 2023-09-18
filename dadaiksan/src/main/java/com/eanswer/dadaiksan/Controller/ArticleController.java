@@ -56,7 +56,7 @@ public class ArticleController {
   }
 
   @PostMapping("/delete/{id}")
-  public ResponseEntity<?> deleteArticle(@PathVariable("id") Long id, @RequestBody ArticleDto articleDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
+  public ResponseEntity<?> deleteArticle(@PathVariable("id") Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
     boolean isDeleted = articleService.deleteArticle(id, request, userDetails);
     if(!isDeleted){
       return new ResponseEntity<>("해당 게시물이 없습니다.",HttpStatus.NO_CONTENT);

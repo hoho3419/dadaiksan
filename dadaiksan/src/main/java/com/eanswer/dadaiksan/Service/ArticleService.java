@@ -40,8 +40,12 @@ public class ArticleService {
 
     for (Article article : articles) {
       ArticleDto articleDto = new ArticleDto();
-      SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
-      String upDateStr = dateFormat.format(article.getUpdateDate());
+
+      if(article.getUpdateDate() == null){
+        articleDto.setUpdateDate(null);
+      }else{
+        articleDto.setUpdateDate(article.getUpdateDate());
+      }
 
       articleDto.setId(article.getId());
       articleDto.setViewCount(article.getViewCount());
@@ -54,7 +58,6 @@ public class ArticleService {
       articleDto.setStatus(article.isStatus());
       articleDto.setAdmin(article.isAdmin());
       articleDto.setRegDate(article.getRegDate());
-      articleDto.setUpdateDate(upDateStr);
       articleDtos.add(articleDto);
     }
     return articleDtos;
@@ -65,17 +68,17 @@ public class ArticleService {
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
 
-    if(!isAdmin.equals(ROLE_ADMIN)){
+    if(!isAdmin.name().equals("ROLE_ADMIN")){
       return false;
     }
 
     Article article = new Article();
 
-    article.setTitle(article.getTitle());
-    article.setArticleType(article.getArticleType());
-    article.setContents(article.getContents());
-    article.setImgUrl(article.getImgUrl());
-    article.setVidUrl(article.getVidUrl());
+    article.setTitle(articleDto.getTitle());
+    article.setArticleType(articleDto.getArticleType());
+    article.setContents(articleDto.getContents());
+    article.setImgUrl(articleDto.getImgUrl());
+    article.setVidUrl(articleDto.getVidUrl());
     article.setRegDate(LocalDateTime.now());
     Article saveArticle = articleRepository.save(article);
     System.out.println(saveArticle);
@@ -86,8 +89,6 @@ public class ArticleService {
     Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("찾는 게시물이 없습니다."));
 
     ArticleDto articleDto1 = new ArticleDto();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yy-MM-dd");
-    String upDateStr = dateFormat.format(article.getUpdateDate());
 
     articleDto1.setId(article.getId());
     articleDto1.setViewCount(article.getViewCount());
@@ -100,7 +101,7 @@ public class ArticleService {
     articleDto1.setStatus(article.isStatus());
     articleDto1.setAdmin(article.isAdmin());
     articleDto1.setRegDate(article.getRegDate());
-    articleDto1.setUpdateDate(upDateStr);
+    articleDto1.setUpdateDate(article.getUpdateDate());
     return  articleDto1;
   }
 
@@ -109,20 +110,17 @@ public class ArticleService {
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
 
-    if (!isAdmin.equals("ROLE_ADMIN")) {
+    if (!isAdmin.name().equals("ROLE_ADMIN")) {
       return false;
     }
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
-    Date date = new Date();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyMMdd");
-    String formattedTime = dateFormat.format(date);
 
-    article.setTitle(article.getTitle());
-    article.setArticleType(article.getArticleType());
-    article.setContents(article.getContents());
-    article.setImgUrl(article.getImgUrl());
-    article.setVidUrl(article.getVidUrl());
-    article.setUpdateDate(formattedTime);
+    article.setTitle(articleDto.getTitle());
+    article.setArticleType(articleDto.getArticleType());
+    article.setContents(articleDto.getContents());
+    article.setImgUrl(articleDto.getImgUrl());
+    article.setVidUrl(articleDto.getVidUrl());
+    article.setUpdateDate(LocalDateTime.now());
     Article saveArticle = articleRepository.save(article);
     return saveArticle != null;
   }
@@ -133,7 +131,7 @@ public class ArticleService {
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
 
-    if (!isAdmin.equals("ROLE_ADMIN")) {
+    if (!isAdmin.name().equals("ROLE_ADMIN")) {
       return false;
     }
 
