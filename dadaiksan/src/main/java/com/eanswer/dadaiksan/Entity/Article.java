@@ -18,7 +18,7 @@ import java.util.List;
 public class Article {
     @Id
     @Column(name = "Article_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Builder.Default
@@ -48,7 +48,7 @@ public class Article {
     private LocalDateTime regDate;
 
     @Column(nullable = false)
-    private Date updateDate;
+    private String updateDate;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;

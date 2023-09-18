@@ -36,7 +36,7 @@ public class EventService {
         Authority isAdmin = member.getAuthority();
         System.out.println(isAdmin);
 
-        if (!isAdmin.equals("ROLE_ADMIN")) {
+        if (!isAdmin.name().equals("ROLE_ADMIN")) {
             return false;
         }
 
@@ -62,7 +62,7 @@ public class EventService {
         Authority isAdmin = member.getAuthority();
         System.out.println(isAdmin);
 
-        if (!isAdmin.equals("ROLE_ADMIN")) {
+        if (!isAdmin.name().equals("ROLE_ADMIN")) {
             return false;
         }
 
@@ -90,7 +90,7 @@ public class EventService {
         Authority isAdmin = member.getAuthority();
         System.out.println(isAdmin);
 
-        if (!isAdmin.equals("ROLE_ADMIN")) {
+        if (!isAdmin.name().equals("ROLE_ADMIN")) {
             return false;
         }
 

@@ -26,6 +26,7 @@ public class Member {
 
     private String password;
 
+    @Column(unique = true)
     private String nickName;
 
     private boolean status = true;
