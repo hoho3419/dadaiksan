@@ -3,7 +3,7 @@ package com.eanswer.dadaiksan.Entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Comment")
@@ -15,33 +15,26 @@ import java.util.Date;
 @Builder
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nickName;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
     private String imgUrl;
 
     private String contents;
 
-    private Date regDate;
+    private LocalDateTime regDate;
 
-    @Column(nullable = false)
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     @ManyToOne
-    @JoinColumn(name = "Article",nullable = false)
+    @JoinColumn(name = "Article")
     private Article article;
 
     @ManyToOne
-    @JoinColumn(name = "Member",nullable = false)
+    @JoinColumn(name = "Member")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "Event",nullable = false)
+    @JoinColumn(name = "Event")
     private Event event;
 }

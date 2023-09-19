@@ -2,9 +2,7 @@ package com.eanswer.dadaiksan.Dto;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,6 +19,6 @@ public class CommentDto {
     private String password;
     private String imgUrl;
     private String contents;
-    private Date regDate;
-    private Date updateDate;
+    private LocalDateTime regDate;
+    private LocalDateTime updateDate;
 }

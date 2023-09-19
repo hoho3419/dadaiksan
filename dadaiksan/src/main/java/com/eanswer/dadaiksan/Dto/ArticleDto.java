@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -23,7 +22,6 @@ public class ArticleDto {
     private String imgUrl;
     private String vidUrl;
     private boolean status = true;
-    private boolean isAdmin = false;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 }

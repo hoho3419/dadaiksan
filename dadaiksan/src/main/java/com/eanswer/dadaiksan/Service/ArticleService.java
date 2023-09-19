@@ -56,7 +56,6 @@ public class ArticleService {
       articleDto.setImgUrl(article.getImgUrl());
       articleDto.setVidUrl(article.getVidUrl());
       articleDto.setStatus(article.isStatus());
-      articleDto.setAdmin(article.isAdmin());
       articleDto.setRegDate(article.getRegDate());
       articleDtos.add(articleDto);
     }
@@ -67,10 +66,6 @@ public class ArticleService {
 
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
-
-    if(!isAdmin.name().equals("ROLE_ADMIN")){
-      return false;
-    }
 
     Article article = new Article();
 
@@ -99,7 +94,6 @@ public class ArticleService {
     articleDto1.setImgUrl(article.getImgUrl());
     articleDto1.setVidUrl(article.getVidUrl());
     articleDto1.setStatus(article.isStatus());
-    articleDto1.setAdmin(article.isAdmin());
     articleDto1.setRegDate(article.getRegDate());
     articleDto1.setUpdateDate(article.getUpdateDate());
     return  articleDto1;
@@ -110,9 +104,6 @@ public class ArticleService {
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
 
-    if (!isAdmin.name().equals("ROLE_ADMIN")) {
-      return false;
-    }
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
     article.setTitle(articleDto.getTitle());
@@ -130,10 +121,6 @@ public class ArticleService {
 
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     Authority isAdmin = member.getAuthority();
-
-    if (!isAdmin.name().equals("ROLE_ADMIN")) {
-      return false;
-    }
 
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     articleRepository.delete(article);
