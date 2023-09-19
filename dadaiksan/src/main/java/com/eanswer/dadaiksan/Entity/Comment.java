@@ -3,6 +3,7 @@ package com.eanswer.dadaiksan.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,7 +29,7 @@ public class Comment {
 
     private String contents;
 
-    private Date regDate;
+    private LocalDateTime regDate;
 
     @Column(nullable = false)
     private Date updateDate;
