@@ -45,7 +45,6 @@ public class CommentService {
         comment.setMember(member);
         comment.setContents(commentDto.getContents());
         comment.setImgUrl(commentDto.getImgUrl());
-        comment.setPassword(commentDto.getPassword());
         comment.setRegDate(LocalDateTime.now());
         Comment saveComment = commentRepository.save(comment);
         return saveComment != null;

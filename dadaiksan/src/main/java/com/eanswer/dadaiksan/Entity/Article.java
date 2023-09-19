@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,6 +26,7 @@ public class Article {
     @Column(name = "like_count", columnDefinition = "int default 0")
     private int likeCount = 0;
 
+    @Column(nullable = false)
     private String articleType;
 
     @Column(nullable = false)
@@ -40,9 +40,6 @@ public class Article {
 
     @Column(name = "status", columnDefinition = "boolean default 1")
     private boolean status = true;
-
-    @Column(name = "is_admin", columnDefinition = "boolean default 0")
-    private boolean isAdmin = false;
 
     private LocalDateTime regDate;
 

@@ -24,7 +24,6 @@ public class Qna {
 
     private String contents;
 
-    @Column(nullable = false)
     private String imgUrl;
 
     private boolean isOpen;
