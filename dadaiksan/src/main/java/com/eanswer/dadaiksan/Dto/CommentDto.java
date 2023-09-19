@@ -16,7 +16,6 @@ public class CommentDto {
     private Long eventId;
     private Long memberId;
     private String nickName;
-    private String password;
     private String imgUrl;
     private String contents;
     private LocalDateTime regDate;
