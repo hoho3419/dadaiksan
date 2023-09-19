@@ -38,7 +38,7 @@ public class Article {
 
     private String vidUrl;
 
-    @Column(name = "status", columnDefinition = "boolean default 1")
+    @Column(name = "status", columnDefinition = "boolean default true")
     private boolean status = true;
 
     private LocalDateTime regDate;

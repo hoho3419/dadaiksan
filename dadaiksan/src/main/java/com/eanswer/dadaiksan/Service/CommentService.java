@@ -37,7 +37,7 @@ public class CommentService {
 
         Member member = authService.validateTokenAndGetUser(request, userDetails);
 
-        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글이 없습니다."))
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글이 없습니다."));
 
         Comment comment = new Comment();
 

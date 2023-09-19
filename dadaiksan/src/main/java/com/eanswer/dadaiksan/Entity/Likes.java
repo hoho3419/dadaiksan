@@ -18,7 +18,7 @@ public class Likes {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "Artcle")
+    @JoinColumn(name = "Article")
     private Article article;
     
     @OneToOne
