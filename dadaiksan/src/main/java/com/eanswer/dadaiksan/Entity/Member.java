@@ -22,7 +22,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
+    private String email;  // unique 속성 부여 후, 이메일은 실장님 이메일로 관리자 권한 부여
 
     private String password;
 

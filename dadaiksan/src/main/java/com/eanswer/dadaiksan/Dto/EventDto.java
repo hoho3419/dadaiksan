@@ -13,11 +13,12 @@ import java.util.Date;
 
 public class EventDto {
     private Long id;
-    private String startDate;
+    private String startDate;  // 230910
     private String finDate;
     private String eventName;
     private String eventContents;
-    private LocalDateTime regDate;
+    private LocalDateTime regDate;  // 등록일자
+    // 이벤트 수정날짜 dto 작성
     private String eventImg;
 
 }

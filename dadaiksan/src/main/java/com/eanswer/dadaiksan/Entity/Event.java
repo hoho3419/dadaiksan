@@ -17,7 +17,7 @@ import java.util.List;
 public class Event {
     @Id
     @Column(name = "event_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO) // identity 수정
     private Long id;
 
     @Column(nullable = false)
@@ -41,3 +41,12 @@ public class Event {
     private List<Comment> comments;
 
 }
+
+
+
+
+/// localhost:8111/admin/event-update
+/// localhost:8111/admin/event-delete
+/// comment-write
+
+/// localhost:8111/admin/article-update
