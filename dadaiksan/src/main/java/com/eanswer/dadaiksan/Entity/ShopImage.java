@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class ShopImage {
     @Id
     @Column(name = "shop_image_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String imgUrl;

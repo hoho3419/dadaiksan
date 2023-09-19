@@ -17,7 +17,7 @@ import java.util.List;
 public class Event {
     @Id
     @Column(name = "event_id")
-    @GeneratedValue(strategy = GenerationType.AUTO) // identity 수정
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // identity 수정
     private Long id;
 
     @Column(nullable = false)
@@ -40,6 +40,7 @@ public class Event {
     @OneToMany(mappedBy = "event")
     private List<Comment> comments;
 
+    private LocalDateTime updateDate;
 }
 
 

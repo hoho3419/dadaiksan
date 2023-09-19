@@ -41,7 +41,7 @@ public class AuthService {
                 throw new RuntimeException("이미 가입되어 있는 유저입니다");
             }
 
-            if (memberRequestDto.getNickname().equals("admin")) { // 이메일로 체크
+            if (memberRequestDto.getEmail().equals("admin@eanswer.com")) { // 이메일로 체크
                 Member member = memberRequestDto.toAdmin(passwordEncoder);
                 return MemberResponseDto.of(memberRepository.save(member));
             } else {

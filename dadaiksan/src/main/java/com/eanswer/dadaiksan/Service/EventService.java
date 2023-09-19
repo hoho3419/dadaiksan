@@ -32,13 +32,7 @@ public class EventService {
 
     public boolean newEvent(EventDto eventDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
-        Member member = authService.validateTokenAndGetUser(request, userDetails);
-        Authority isAdmin = member.getAuthority();
-        System.out.println(isAdmin);
-
-        if (!isAdmin.name().equals("ROLE_ADMIN")) {
-            return false;
-        }
+        authService.validateTokenAndGetUser(request, userDetails);
 
         Event event = new Event();
 
@@ -58,13 +52,7 @@ public class EventService {
     @Transactional
     public boolean updateEvent(Long id, EventDto eventDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
-        Member member = authService.validateTokenAndGetUser(request, userDetails);
-        Authority isAdmin = member.getAuthority();
-        System.out.println(isAdmin);
-
-        if (!isAdmin.name().equals("ROLE_ADMIN")) {
-            return false;
-        }
+        authService.validateTokenAndGetUser(request, userDetails);
 
         Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
 
@@ -76,8 +64,8 @@ public class EventService {
         event.setFinDate(finDate);
         event.setEventName(eventDto.getEventName());
         event.setEventContents(eventDto.getEventContents());
-        event.setRegDate(LocalDateTime.now());
         event.setEventImg(eventDto.getEventImg());
+        event.setUpdateDate(LocalDateTime.now());
         Event updateEvent = eventRepository.save(event);
 
         return updateEvent != null;
@@ -86,13 +74,7 @@ public class EventService {
     @Transactional
     public boolean deleteEvent(Long id, HttpServletRequest request, UserDetails userDetails) {
 
-        Member member = authService.validateTokenAndGetUser(request, userDetails);
-        Authority isAdmin = member.getAuthority();
-        System.out.println(isAdmin);
-
-        if (!isAdmin.name().equals("ROLE_ADMIN")) {
-            return false;
-        }
+        authService.validateTokenAndGetUser(request, userDetails);
 
         Event event = eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 이벤트가 없습니다."));
         eventRepository.delete(event);

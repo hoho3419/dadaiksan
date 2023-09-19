@@ -38,11 +38,16 @@ public class WebSercurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
+
+                // 관리자 권한이 있는 경우에만 permit 할 수 있게끔 변경
+
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/event/**").permitAll()
                 .antMatchers("/article/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 권한
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception").permitAll()
                 .antMatchers("/thymeleaf/**").permitAll()
                 .anyRequest().authenticated()
