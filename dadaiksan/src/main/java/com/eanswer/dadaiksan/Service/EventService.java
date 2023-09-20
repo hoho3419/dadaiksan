@@ -100,6 +100,7 @@ public class EventService {
             eventDto.setFinDate(finDateStr);
             eventDto.setRegDate(event.getRegDate());
             eventDto.setEventImg(event.getEventImg());
+            eventDto.setUpdateTime(event.getUpdateDate());
             eventDtos.add(eventDto);
         }
 
@@ -121,6 +122,7 @@ public class EventService {
         eventDto.setFinDate(finDateStr);
         eventDto.setRegDate(event.getRegDate());
         eventDto.setEventImg(event.getEventImg());
+        eventDto.setUpdateTime(event.getUpdateDate());
 
         return eventDto;
     }

@@ -32,4 +32,5 @@ public class Shop {
 
     private String shopDesc;
 
+
 }
