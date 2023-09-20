@@ -12,9 +12,9 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
   @Query("SELECT m.nickName " +
       "FROM Article a " +
       "INNER JOIN Likes l " +
-      "ON a.article_id = l.article " +
+      "ON a.id = l.article " +
       "INNER JOIN Member m " +
       "ON l.member = m.id " +
-      "WHERE a.id = :articleId AND m.member = :memberId")
+      "WHERE a.id = :articleId AND m.id = :memberId")
   String findByArticleAndLikes(@Param("articleId") Long articleId,@Param("memberId") Long memberId);
 }
