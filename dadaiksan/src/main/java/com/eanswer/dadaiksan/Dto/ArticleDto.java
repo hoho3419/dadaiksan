@@ -21,6 +21,7 @@ public class ArticleDto {
     private String contents;
     private String imgUrl;
     private String vidUrl;
+    private String nickName;
     private boolean status = true;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;

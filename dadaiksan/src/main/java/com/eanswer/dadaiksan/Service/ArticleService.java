@@ -1,12 +1,10 @@
 package com.eanswer.dadaiksan.Service;
 
 import com.eanswer.dadaiksan.Dto.ArticleDto;
-import com.eanswer.dadaiksan.Dto.EventDto;
 import com.eanswer.dadaiksan.Entity.Article;
-import com.eanswer.dadaiksan.Entity.Event;
 import com.eanswer.dadaiksan.Entity.Member;
 import com.eanswer.dadaiksan.Repository.ArticleRepository;
-import com.eanswer.dadaiksan.constant.Authority;
+import com.eanswer.dadaiksan.Repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,21 +13,18 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.eanswer.dadaiksan.constant.Authority.ROLE_ADMIN;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
   @Autowired
   private ArticleRepository articleRepository;
-  private ArticleDto articleDto;
+  @Autowired
+  private MemberRepository memberRepository;
   @Autowired
   private AuthService authService;
 
@@ -41,12 +36,6 @@ public class ArticleService {
     for (Article article : articles) {
       ArticleDto articleDto = new ArticleDto();
 
-      if(article.getUpdateDate() == null){
-        articleDto.setUpdateDate(null);
-      }else{
-        articleDto.setUpdateDate(article.getUpdateDate());
-      }
-
       articleDto.setId(article.getId());
       articleDto.setViewCount(article.getViewCount());
       articleDto.setLikeCount(article.getLikeCount());
@@ -57,6 +46,7 @@ public class ArticleService {
       articleDto.setVidUrl(article.getVidUrl());
       articleDto.setStatus(article.isStatus());
       articleDto.setRegDate(article.getRegDate());
+      articleDto.setUpdateDate(article.getUpdateDate());
       articleDtos.add(articleDto);
     }
     return articleDtos;
@@ -65,7 +55,6 @@ public class ArticleService {
   public boolean newArticle(ArticleDto articleDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
     Member member = authService.validateTokenAndGetUser(request,userDetails);
-    Authority isAdmin = member.getAuthority();
 
     Article article = new Article();
 
@@ -80,11 +69,16 @@ public class ArticleService {
     return true;
   }
 
-  public ArticleDto readArticle(Long id){
-    Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("찾는 게시물이 없습니다."));
-
+  public ArticleDto readArticle(Long id,HttpServletRequest request,UserDetails userDetails){
     ArticleDto articleDto1 = new ArticleDto();
 
+    Member member = authService.validateTokenAndGetUser(request,userDetails);
+    if(member != null){
+      String memberNickName = articleRepository.findByArticleAndLikes(id,member.getId());
+      articleDto1.setNickName(memberNickName);
+    }
+
+    Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("찾는 게시물이 없습니다."));
     articleDto1.setId(article.getId());
     articleDto1.setViewCount(article.getViewCount());
     articleDto1.setLikeCount(article.getLikeCount());
@@ -96,13 +90,12 @@ public class ArticleService {
     articleDto1.setStatus(article.isStatus());
     articleDto1.setRegDate(article.getRegDate());
     articleDto1.setUpdateDate(article.getUpdateDate());
-    return  articleDto1;
+    return articleDto1;
   }
 
   @Transactional
   public boolean updateArticle(Long id, ArticleDto articleDto, HttpServletRequest request, UserDetails userDetails) throws ParseException{
     Member member = authService.validateTokenAndGetUser(request,userDetails);
-    Authority isAdmin = member.getAuthority();
 
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
 
@@ -120,7 +113,6 @@ public class ArticleService {
   public boolean deleteArticle(Long id, HttpServletRequest request, UserDetails userDetails){
 
     Member member = authService.validateTokenAndGetUser(request,userDetails);
-    Authority isAdmin = member.getAuthority();
 
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     articleRepository.delete(article);

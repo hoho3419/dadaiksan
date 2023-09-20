@@ -91,17 +91,15 @@ public class AuthService {
 
     public Member validateTokenAndGetUser(HttpServletRequest request, UserDetails userDetails) {
         String accessToken = request.getHeader("Authorization");
-        if (accessToken != null && accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
+        if (accessToken == null ) {
+            return null;
         }
-        if (accessToken != null && tokenProvider.validateToken(accessToken)) {
-            Long Id = Long.valueOf(userDetails.getUsername());
-            Member member = memberRepository.findById(Id).orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다"));
-            return member;
-        } else {
+        accessToken = accessToken.substring(7);
+        if (!tokenProvider.validateToken(accessToken)) {
             throw new IllegalArgumentException("토큰이 만료됐습니다. Refresh Token을 보내주세요.");
         }
-
+        Long Id = Long.valueOf(userDetails.getUsername());
+        return memberRepository.findById(Id).orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다"));
     }
 
 }
