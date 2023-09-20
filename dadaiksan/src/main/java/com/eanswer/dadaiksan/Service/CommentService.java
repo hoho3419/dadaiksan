@@ -1,5 +1,6 @@
 package com.eanswer.dadaiksan.Service;
 
+import com.eanswer.dadaiksan.Dto.ArticleDto;
 import com.eanswer.dadaiksan.Dto.CommentDto;
 import com.eanswer.dadaiksan.Dto.EventDto;
 import com.eanswer.dadaiksan.Entity.Article;
@@ -10,12 +11,14 @@ import com.eanswer.dadaiksan.Repository.ArticleRepository;
 import com.eanswer.dadaiksan.Repository.CommentRepository;
 import com.eanswer.dadaiksan.Repository.EventRepository;
 import com.eanswer.dadaiksan.Repository.MemberRepository;
+import com.eanswer.dadaiksan.constant.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -95,4 +98,34 @@ public class CommentService {
         return commentDtos;
     }
 
+    public boolean updateComment(Long id, CommentDto commentDto, HttpServletRequest request, UserDetails userDetails) {
+
+        Member member = authService.validateTokenAndGetUser(request,userDetails);
+
+        Comment comment = commentRepository.findByIdAndMember(id, member).orElseThrow(() -> new IllegalArgumentException("유저가 작성한 댓글이 아니거나, 해당 댓글이 없습니다."));
+
+        comment.setContents(commentDto.getContents());
+        comment.setImgUrl(commentDto.getImgUrl());
+        comment.setUpdateDate(LocalDateTime.now());
+        Comment saveComment = commentRepository.save(comment);
+
+        return saveComment != null;
+    }
+
+    @Transactional
+    public boolean deleteComment(Long id, HttpServletRequest request, UserDetails userDetails){
+
+        Member member = authService.validateTokenAndGetUser(request,userDetails);
+        Comment comment = new Comment();
+
+        if (member.getAuthority().name().equals("ROLE_ADMIN")) {
+            comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
+        }
+        else {
+            comment = commentRepository.findByIdAndMember(id, member).orElseThrow(() -> new IllegalArgumentException("유저가 작성한 댓글이 아니거나, 해당 댓글이 없습니다."));
+        }
+
+        commentRepository.delete(comment);
+        return true;
+    }
 }

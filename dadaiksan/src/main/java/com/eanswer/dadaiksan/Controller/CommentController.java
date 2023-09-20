@@ -32,9 +32,30 @@ public class CommentController {
         return new ResponseEntity<>("새로운 댓글 등록 성공",HttpStatus.OK);
     }
 
-    @GetMapping("/read-all/{id}/{type}")
+    @GetMapping("/read-all/{id}/{type}") // 조회
     public ResponseEntity readComment(@PathVariable Long id, @PathVariable String type){
         List<CommentDto> comments = commentService.getAllComments(id, type);
         return ResponseEntity.ok(comments);
+    }
+
+    @PostMapping("/update/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Long id, @RequestBody CommentDto commentDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            boolean isUpdated = commentService.updateComment(id, commentDto, request, userDetails);
+            return new ResponseEntity<>(isUpdated,HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (IllegalStateException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        boolean isDeleted = commentService.deleteComment(id, request, userDetails);
+        if(!isDeleted){
+            return new ResponseEntity<>("해당 게시물이 없습니다.",HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>("해당 게시물이 삭제 되었습니다.",HttpStatus.OK);
     }
 }
