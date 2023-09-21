@@ -2,8 +2,10 @@ package com.eanswer.dadaiksan.Controller;
 
 import com.eanswer.dadaiksan.Dto.ArticleDto;
 import com.eanswer.dadaiksan.Dto.EventDto;
+import com.eanswer.dadaiksan.Dto.ShopDto;
 import com.eanswer.dadaiksan.Service.ArticleService;
 import com.eanswer.dadaiksan.Service.EventService;
+import com.eanswer.dadaiksan.Service.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class AdminController {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private ShopService shopService;
 
     /**
      * 이벤트
@@ -96,4 +101,44 @@ public class AdminController {
         }
         return  new ResponseEntity<>("해당 게시물이 삭제 되었습니다.",HttpStatus.OK);
     }
+
+    /**
+     * 매장
+     */
+
+    @PostMapping("shop-create")
+    public ResponseEntity<?> newShop(@RequestBody ShopDto shopDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+        boolean isCreate = shopService.newShop(shopDto, request, userDetails);
+
+        if (! isCreate) {
+            return new ResponseEntity<>("매장 등록 실패", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>("매장 등록 성공", HttpStatus.OK);
+    }
+
+    @PostMapping("/shop-update/{id}")
+    public ResponseEntity<?> updateShop(@PathVariable("id") Long id, @RequestBody ShopDto shopDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
+        try {
+            boolean isUpdated = shopService.updateShop(id, shopDto, request, userDetails);
+            return new ResponseEntity<>(isUpdated,HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (IllegalStateException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/shop-delete/{id}")
+    public ResponseEntity<?> deleteShop(@PathVariable("id") Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
+        boolean isDeleted = shopService.deleteShop(id, request, userDetails);
+        if(!isDeleted){
+            return new ResponseEntity<>("해당 매장이 없습니다.",HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>("해당 매장이 삭제 되었습니다.",HttpStatus.OK);
+    }
+
+
+
+
 }

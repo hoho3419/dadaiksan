@@ -3,6 +3,7 @@ package com.eanswer.dadaiksan.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,5 +29,7 @@ public class Qna {
 
     private boolean isOpen;
 
-    private Date regDate;
+    private LocalDateTime regDate;
+
+    private String rcvMail;
 }

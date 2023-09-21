@@ -45,7 +45,9 @@ public class WebSercurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/qna/**").permitAll()
                 .antMatchers("/event/**").permitAll()
+                .antMatchers("/shop/**").permitAll()
                 .antMatchers("/article/**").permitAll()
                 .antMatchers("/comment/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 권한

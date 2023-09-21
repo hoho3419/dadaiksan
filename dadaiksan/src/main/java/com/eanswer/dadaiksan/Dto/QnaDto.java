@@ -17,4 +17,5 @@ public class QnaDto {
     private String imgUrl;
     private boolean isOpen;
     private Date regDate;
+    private String rcvMail;
 }
