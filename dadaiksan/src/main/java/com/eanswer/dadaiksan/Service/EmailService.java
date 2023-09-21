@@ -60,13 +60,16 @@ public class EmailService {
         String rcvMail = qnaDto.getRcvMail();
 
         String msg="";
-        msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">다다영등 홈페이지 문의요청</h1>";
-        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\">";
+        msg += "<h3 style=\"font-size: 20px; padding-right: 30px; padding-left: 30px;\">다다영등 문의</h3>";
+        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\"> 제목 : ";
         msg += title;
         msg += "</p>";
-        msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; background-color: #F4F4F4; height: 70px; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\"text-align: center; vertical-align: middle; font-size: 30px;\">";
+        msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; height: auto; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\" font-size: 15px;\">";
         msg += content;
         msg += "</td></tr></tbody></table></div>";
+        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\"> 회신메일 주소 : ";
+        msg += rcvMail;
+        msg += "</p>";
 
         message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
         message.setFrom(new InternetAddress(id,rcvMail)); //보내는 사람의 메일 주소, 보내는 사람 이름
