@@ -84,4 +84,19 @@ public class ShopService {
 
         return shopDtos;
     }
+
+    public ShopDto readShop(Long id) {
+
+        Shop shop = shopRepository.findById(id).orElseThrow(()->new RuntimeException("매장이 없습니다."));
+
+        ShopDto shopDto = new ShopDto();
+
+        shopDto.setId(shop.getId());
+        shopDto.setShopName(shop.getShopName());
+        shopDto.setShopDesc(shop.getShopDesc());
+        shopDto.setAddress(shop.getAddress());
+        shopDto.setCategory(shop.getCategory());
+
+        return shopDto;
+    }
 }

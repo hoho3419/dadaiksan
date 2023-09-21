@@ -116,4 +116,29 @@ public class AdminController {
 
         return new ResponseEntity<>("매장 등록 성공", HttpStatus.OK);
     }
+
+    @PostMapping("/shop-update/{id}")
+    public ResponseEntity<?> updateShop(@PathVariable("id") Long id, @RequestBody ShopDto shopDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
+        try {
+            boolean isUpdated = shopService.updateShop(id, shopDto, request, userDetails);
+            return new ResponseEntity<>(isUpdated,HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }catch (IllegalStateException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PostMapping("/shop-delete/{id}")
+    public ResponseEntity<?> deleteShop(@PathVariable("id") Long id, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException{
+        boolean isDeleted = shopService.deleteShop(id, request, userDetails);
+        if(!isDeleted){
+            return new ResponseEntity<>("해당 매장이 없습니다.",HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>("해당 매장이 삭제 되었습니다.",HttpStatus.OK);
+    }
+
+
+
+
 }
