@@ -31,14 +31,16 @@ public class ArticleService {
 
   public List<ArticleDto> getAllArticle() {
     List<ArticleDto> articleDtos = new ArrayList<>();
-    List<Article> articles = articleRepository.findAll();
+    List<Article> articles = articleRepository.findByAllArticleAndLikes();
+
+    System.out.println(articles);
 
     for (Article article : articles) {
       ArticleDto articleDto = new ArticleDto();
 
       articleDto.setId(article.getId());
       articleDto.setViewCount(article.getViewCount());
-      articleDto.setLikeCount(article.getLikeCount());
+      articleDto.setLikeCount(article.getLikeCounts());
       articleDto.setTitle(article.getTitle());
       articleDto.setArticleType(article.getArticleType());
       articleDto.setContents(article.getContents());

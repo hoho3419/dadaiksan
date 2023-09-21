@@ -50,4 +50,7 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private List<Likes> like;
+
+    @Transient
+    private int likeCounts;
 }
