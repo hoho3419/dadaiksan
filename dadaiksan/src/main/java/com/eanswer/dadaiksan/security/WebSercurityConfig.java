@@ -46,6 +46,7 @@ public class WebSercurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/event/**").permitAll()
+                .antMatchers("/likes/**").permitAll()
                 .antMatchers("/article/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 권한
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception").permitAll()

@@ -3,6 +3,7 @@ package com.eanswer.dadaiksan.Dto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
 public class ArticleDto {
     private Long id;
     private int viewCount = 0;
-    private int likeCount = 0;
+    private BigInteger likeCount;
+    private int likeCounts;
     private String articleType;
     private String title;
     private String contents;

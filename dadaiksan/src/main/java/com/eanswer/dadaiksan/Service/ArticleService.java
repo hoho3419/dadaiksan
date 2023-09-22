@@ -12,10 +12,14 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -31,26 +35,57 @@ public class ArticleService {
 
   public List<ArticleDto> getAllArticle() {
     List<ArticleDto> articleDtos = new ArrayList<>();
-    List<Article> articles = articleRepository.findByAllArticleAndLikes();
+    List<Object[]> articles = articleRepository.findByAllArticleAndLikes();
 
-    System.out.println(articles);
-
-    for (Article article : articles) {
+    for (Object[] arr : articles) {
       ArticleDto articleDto = new ArticleDto();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 
-      articleDto.setId(article.getId());
-      articleDto.setViewCount(article.getViewCount());
-      articleDto.setLikeCount(article.getLikeCounts());
-      articleDto.setTitle(article.getTitle());
-      articleDto.setArticleType(article.getArticleType());
-      articleDto.setContents(article.getContents());
-      articleDto.setImgUrl(article.getImgUrl());
-      articleDto.setVidUrl(article.getVidUrl());
-      articleDto.setStatus(article.isStatus());
-      articleDto.setRegDate(article.getRegDate());
-      articleDto.setUpdateDate(article.getUpdateDate());
+      Long id = arr[0] != null ? Long.valueOf(arr[0].toString()) : null;
+      String Type = arr[1] != null ? (String)arr[1] : null;
+      String contents = arr[2] != null ? (String)arr[2] : null;
+      String imgUrl = arr[3] != null ? (String)arr[3] : null;
+      Optional<String> regString = (arr[4] != null) ? Optional.of(arr[4].toString()) : Optional.empty();
+      Optional<LocalDateTime> regDate = regString.map(str -> str != null ? LocalDateTime.parse(str, formatter) : null);
+      boolean status = arr[5] != null ? (boolean)arr[5] : true;
+      String title = arr[6] != null ? (String)arr[6] : null;
+      Optional<String> updateString = (arr[7] != null) ? Optional.of(arr[7].toString()) : Optional.empty();
+      Optional<LocalDateTime> updateDate = updateString.map(str -> str != null ? LocalDateTime.parse(str, formatter) : null);
+      String vidUrl = arr[8] != null ? (String)arr[8] : null;
+      int viewCount = arr[9] != null ? (int)arr[9] : null;
+      BigInteger likeCount = arr[10] != null ? (BigInteger)arr[10] : null;
+
+      articleDto.setId(id);
+      articleDto.setArticleType(Type);
+      articleDto.setContents(contents);
+      articleDto.setImgUrl(imgUrl);
+      articleDto.setRegDate(regDate.orElse(null));
+      articleDto.setStatus(status);
+      articleDto.setTitle(title);
+      articleDto.setUpdateDate(updateDate.orElse(null));
+      articleDto.setVidUrl(vidUrl);
+      articleDto.setViewCount(viewCount);
+      articleDto.setLikeCount(likeCount);
+
       articleDtos.add(articleDto);
     }
+
+//    for (Article article : articles) {
+//      ArticleDto articleDto = new ArticleDto();
+//
+//      articleDto.setId(article.getId());
+//      articleDto.setViewCount(article.getViewCount());
+//      articleDto.setLikeCount(article.getLikeCounts());
+//      articleDto.setTitle(article.getTitle());
+//      articleDto.setArticleType(article.getArticleType());
+//      articleDto.setContents(article.getContents());
+//      articleDto.setImgUrl(article.getImgUrl());
+//      articleDto.setVidUrl(article.getVidUrl());
+//      articleDto.setStatus(article.isStatus());
+//      articleDto.setRegDate(article.getRegDate());
+//      articleDto.setUpdateDate(article.getUpdateDate());
+//      articleDtos.add(articleDto);
+//    }
     return articleDtos;
   }
 
@@ -83,7 +118,7 @@ public class ArticleService {
     Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("찾는 게시물이 없습니다."));
     articleDto1.setId(article.getId());
     articleDto1.setViewCount(article.getViewCount());
-    articleDto1.setLikeCount(article.getLikeCount());
+//    articleDto1.setLikeCount(article.getLikeCount());
     articleDto1.setTitle(article.getTitle());
     articleDto1.setArticleType(article.getArticleType());
     articleDto1.setContents(article.getContents());

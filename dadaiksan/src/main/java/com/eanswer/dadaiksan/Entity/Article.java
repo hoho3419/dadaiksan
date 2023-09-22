@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -22,9 +23,6 @@ public class Article {
 
     @Column(name = "view_count", columnDefinition = "int default 0")
     private int viewCount = 0;
-
-    @Column(name = "like_count", columnDefinition = "int default 0")
-    private int likeCount = 0;
 
     @Column(nullable = false)
     private String articleType;
@@ -51,6 +49,4 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Likes> like;
 
-    @Transient
-    private int likeCounts;
 }

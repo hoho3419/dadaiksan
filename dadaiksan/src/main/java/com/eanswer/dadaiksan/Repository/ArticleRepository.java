@@ -32,5 +32,21 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
       "FROM Article a " +
       "LEFT JOIN Likes l ON a.article_id = l.article " +
       "GROUP BY a.article_id",nativeQuery = true)
-  List<Article> findByAllArticleAndLikes();
+  List<Object[]> findByAllArticleAndLikes();
+
+//  @Query(value = "SELECT a.article_id, " +
+//      "a.article_type, " +
+//      "a.contents, " +
+//      "a.img_url, " +
+//      "a.reg_date, " +
+//      "a.status, " +
+//      "a.title, " +
+//      "a.like_count, " +
+//      "a.update_date, " +
+//      "a.vid_url, " +
+//      "a.view_count, count(l.article) AS like_counts " +
+//      "FROM Article a " +
+//      "LEFT JOIN Likes l ON a.article_id = l.article " +
+//      "GROUP BY a.article_id",nativeQuery = true)
+//  List<Object[]> findByAllArticleAndLikes();
 }
