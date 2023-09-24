@@ -17,11 +17,13 @@ public class Likes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private boolean status;
+
     @ManyToOne
     @JoinColumn(name = "Article")
     private Article article;
     
     @OneToOne
-    @JoinColumn(name = "Member")
+    @JoinColumn(name = "Member",unique = true)
     private Member member;
 }

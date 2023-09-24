@@ -20,6 +20,7 @@ public class LikesService {
   @Transactional
   public boolean likesToggle(Long id, HttpServletRequest request, UserDetails userDetails){
     Member member = authService.validateTokenAndGetUser(request,userDetails);
+    System.out.println(member.getId());
     int a = likesRepository.likesToggle(id,member.getId());
     return true;
   }

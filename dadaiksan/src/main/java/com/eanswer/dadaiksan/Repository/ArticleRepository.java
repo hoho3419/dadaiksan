@@ -28,7 +28,8 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
       "a.title, " +
       "a.update_date, " +
       "a.vid_url, " +
-      "a.view_count, count(l.article) AS like_counts " +
+      "a.view_count, " +
+      "COUNT(CASE WHEN l.status = 1 THEN l.article ELSE NULL END) AS like_counts " +
       "FROM Article a " +
       "LEFT JOIN Likes l ON a.article_id = l.article " +
       "GROUP BY a.article_id",nativeQuery = true)
