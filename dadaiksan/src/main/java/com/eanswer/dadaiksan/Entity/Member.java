@@ -29,6 +29,7 @@ public class Member {
     @Column(unique = true)
     private String nickName;
 
+    @Column(name = "status", columnDefinition = "boolean default true")
     private boolean status = true;
 
     @Enumerated(EnumType.STRING)

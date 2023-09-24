@@ -48,6 +48,7 @@ public class CommentService {
     public boolean newComment(Long id, String type, CommentDto commentDto, HttpServletRequest request, UserDetails userDetails) throws ParseException {
 
         Member member = authService.validateTokenAndGetUser(request, userDetails);
+        Article article1 = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("게시글이 없습니다."));
         Comment comment = new Comment();
 
         if (type.equals("event")) {
