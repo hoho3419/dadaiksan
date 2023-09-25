@@ -20,16 +20,9 @@ public class Qna {
     @Column(name = "Qna_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private String contents;
-
     private String imgUrl;
-
-    private boolean isOpen;
-
     private LocalDateTime regDate;
-
     private String rcvMail;
 }

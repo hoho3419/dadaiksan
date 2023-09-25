@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @Component
 
-public class WebSercurityConfig {
+public class WebSecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -39,12 +39,10 @@ public class WebSercurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
 
-                // 관리자 권한이 있는 경우에만 permit 할 수 있게끔 변경
-
-
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/kakao/**").permitAll()
                 .antMatchers("/qna/**").permitAll()
                 .antMatchers("/event/**").permitAll()
                 .antMatchers("/shop/**").permitAll()

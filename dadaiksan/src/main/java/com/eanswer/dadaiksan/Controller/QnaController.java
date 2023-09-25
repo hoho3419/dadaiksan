@@ -22,7 +22,7 @@ public class QnaController {
     @ResponseBody
     public Object findEmailOverlap(@RequestBody QnaDto qnaDto) throws Exception {
 
-        String email = "ansrlgur12@naver.com";
+        String email = "ansrlgur12@eanswer.co.kr";
         Boolean isTrue = emailService.sendSimpleMessage(qnaDto, email);
 
         return new ResponseEntity<>(isTrue, HttpStatus.OK);
