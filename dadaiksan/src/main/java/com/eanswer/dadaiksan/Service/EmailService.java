@@ -72,7 +72,7 @@ public class EmailService {
         msg += "</p>";
 
         message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
-        message.setFrom(new InternetAddress(id,rcvMail)); //보내는 사람의 메일 주소, 보내는 사람 이름
+        message.setFrom(new InternetAddress(id, rcvMail)); //보내는 사람의 메일 주소, 보내는 사람 이름
 
         return message;
     }

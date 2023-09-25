@@ -8,14 +8,19 @@ import com.eanswer.dadaiksan.Repository.MemberRepository;
 import com.eanswer.dadaiksan.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -23,6 +28,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class AuthService {
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -32,6 +38,9 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private TokenProvider tokenProvider;
+    @Autowired
+    private UserDetailsService userDetailsService;
+
 
 
     @Transactional
@@ -63,7 +72,6 @@ public class AuthService {
     public TokenDto login(MemberRequestDto memberRequestDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
-
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -72,6 +80,26 @@ public class AuthService {
 
         return tokenDto;
     }
+
+    @Transactional
+    public TokenDto loginWithUsername(String username) {
+        // 1. 사용자 아이디를 기반으로 사용자 정보를 조회합니다.
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        // 2. 사용자 정보가 없으면 예외 처리
+        if (userDetails == null) {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+        }
+
+        // 3. 인증 정보 생성
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        // 4. 토큰 발급
+        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+
+        return tokenDto;
+    }
+
 
     @Transactional
     public TokenDto refreshToken(String refreshToken) {

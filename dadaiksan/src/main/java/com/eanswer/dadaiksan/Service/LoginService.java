@@ -1,11 +1,18 @@
 package com.eanswer.dadaiksan.Service;
 
+import com.eanswer.dadaiksan.Dto.MemberRequestDto;
+import com.eanswer.dadaiksan.Dto.MemberResponseDto;
 import com.eanswer.dadaiksan.Entity.Member;
+import com.eanswer.dadaiksan.Repository.MemberRepository;
 import com.eanswer.dadaiksan.constant.Authority;
 import com.eanswer.dadaiksan.kakao.KakaoToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -13,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+@PropertySource("classpath:application.properties")
 @Slf4j
 @Component
 public class LoginService {
@@ -21,6 +29,15 @@ public class LoginService {
 //    public LoginService(LoginMapper loginMapper) {
 //        this.loginMapper = loginMapper;
 //    }
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Value("${kakao.password}")
+    String password;
 
     //인증코드로 token요청하기
     public KakaoToken requestToken(String code) {
@@ -39,16 +56,19 @@ public class LoginService {
             //파라미터 세팅
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
-            //0번 파라미터 grant_type 입니다 authorization_code로 고정이라니 고정등록해줍니다
+
             sb.append("grant_type=authorization_code");
 
-            //1번 파라미터 client_id입니다. ***자신의 앱 REST API KEY로 변경해주세요***
+            //앱 REST API KEY
             sb.append("&client_id=539c5b89abd17f53932f14046ae0a45f");
+            sb.append("&client_secret=30KHngEOxUqQcdzOB9mm3ARbSxW9M6gB");
 
-            //2번 파라미터 redirect_uri입니다. ***자신의 redirect uri로 변경해주세요***
-            sb.append("&redirect_uri=http://localhost:8111/kakao/login");
+            //redirect uri
+            sb.append("&redirect_uri=http://localhost:3000/kakao/login");
 
-            //3번 파라미터 code입니다. 인자로 받아온 인증코드입니다.
+
+
+            //인증코드
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();//실제 요청을 보내는 부분
@@ -95,7 +115,8 @@ public class LoginService {
     public Member requestUser(String accessToken){
         log.info("requestUser 시작");
         String strUrl = "https://kapi.kakao.com/v2/user/me"; //request를 보낼 주소
-        Member member = new Member(); //response를 받을 객체
+        Member kakaoMember = new Member(); //response를 받을 객체
+        MemberRequestDto kakaoRequestDto = new MemberRequestDto();
 
         try{
             URL url = new URL(strUrl);
@@ -145,18 +166,26 @@ public class LoginService {
             }
 
             //유저정보 세팅
-            member.setId(id);
-            member.setEmail(email);
-            member.setNickName(nickname);
-            member.setAuthority(Authority.ROLE_USER);
+            kakaoRequestDto.setNickName(nickname);
+            kakaoRequestDto.setEmail(email);
+            kakaoRequestDto.setPassword(password);
+
+
+            if (!memberRepository.existsByEmail(kakaoRequestDto.getEmail())) {
+                kakaoMember = kakaoRequestDto.toMember(passwordEncoder);
+                memberRepository.save(kakaoMember);
+            }
+            else {
+                kakaoMember = memberRepository.findByEmail(email).orElseThrow();
+            }
 
             log.info("resultMap= {}",resultMap);
             log.info("properties= {}",properties);
-
+            System.out.println("여기가 끝");
 
         }catch (IOException e) {
             e.printStackTrace();
         }
-        return member;
+        return kakaoMember;
     }
 }
