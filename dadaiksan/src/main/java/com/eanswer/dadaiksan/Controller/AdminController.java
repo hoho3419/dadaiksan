@@ -106,7 +106,7 @@ public class AdminController {
      * 매장
      */
 
-    @PostMapping("shop-create")
+    @PostMapping("/shop-create")
     public ResponseEntity<?> newShop(@RequestBody ShopDto shopDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         boolean isCreate = shopService.newShop(shopDto, request, userDetails);
 

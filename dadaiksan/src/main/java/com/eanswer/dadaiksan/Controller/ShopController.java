@@ -33,4 +33,6 @@ public class ShopController {
         ShopDto shopDto = shopService.readShop(id);
         return new ResponseEntity<>(shopDto, HttpStatus.OK);
     }
+
+
 }
