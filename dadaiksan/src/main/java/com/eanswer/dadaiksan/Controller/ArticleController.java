@@ -28,8 +28,8 @@ public class ArticleController {
   }
 
   @GetMapping("/read/{id}") // 조회
-  public ResponseEntity<ArticleDto> readArticle(@PathVariable Long id){
-    ArticleDto articleDto = articleService.readArticle(id);
+  public ResponseEntity<ArticleDto> readArticle(@PathVariable Long id, HttpServletRequest request,@AuthenticationPrincipal UserDetails userDetails){
+    ArticleDto articleDto = articleService.readArticle(id,request,userDetails);
     return new ResponseEntity<>(articleDto,HttpStatus.OK);
   }
 
