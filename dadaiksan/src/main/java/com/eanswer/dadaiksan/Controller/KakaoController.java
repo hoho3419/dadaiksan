@@ -8,6 +8,7 @@ import com.eanswer.dadaiksan.Entity.Member;
 import com.eanswer.dadaiksan.Service.AuthService;
 import com.eanswer.dadaiksan.Service.LoginService;
 import com.eanswer.dadaiksan.kakao.KakaoToken;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +20,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
 @PropertySource("classpath:application.properties")
-@Controller
+@RestController
+@RequiredArgsConstructor
+@Transactional
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/kakao")
 public class KakaoController {
@@ -55,7 +59,15 @@ public class KakaoController {
         memberRequestDto.setNickName(member.getNickName());
 
         TokenDto tokenDto = authService.login(memberRequestDto);
-        return ResponseEntity.ok().body(new MemberTokenResponse(member, tokenDto));
+        return ResponseEntity.ok().body(new MemberTokenResponse(member, tokenDto, kakaoToken));
 
+    }
+
+    @PostMapping("/logout")
+    public Boolean kakaologout(@RequestBody Map<String, String> accesstoken) {
+        System.out.println("로그아웃 컨트롤러 진입");
+        String token = accesstoken.get("token");
+        System.out.println(token);
+        return loginService.logout(token);
     }
 }
