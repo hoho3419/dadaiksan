@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.text.ParseException;
@@ -69,23 +71,6 @@ public class ArticleService {
 
       articleDtos.add(articleDto);
     }
-
-//    for (Article article : articles) {
-//      ArticleDto articleDto = new ArticleDto();
-//
-//      articleDto.setId(article.getId());
-//      articleDto.setViewCount(article.getViewCount());
-//      articleDto.setLikeCount(article.getLikeCounts());
-//      articleDto.setTitle(article.getTitle());
-//      articleDto.setArticleType(article.getArticleType());
-//      articleDto.setContents(article.getContents());
-//      articleDto.setImgUrl(article.getImgUrl());
-//      articleDto.setVidUrl(article.getVidUrl());
-//      articleDto.setStatus(article.isStatus());
-//      articleDto.setRegDate(article.getRegDate());
-//      articleDto.setUpdateDate(article.getUpdateDate());
-//      articleDtos.add(articleDto);
-//    }
     return articleDtos;
   }
 
@@ -118,7 +103,6 @@ public class ArticleService {
     Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("찾는 게시물이 없습니다."));
     articleDto1.setId(article.getId());
     articleDto1.setViewCount(article.getViewCount());
-//    articleDto1.setLikeCount(article.getLikeCount());
     articleDto1.setTitle(article.getTitle());
     articleDto1.setArticleType(article.getArticleType());
     articleDto1.setContents(article.getContents());
@@ -154,5 +138,38 @@ public class ArticleService {
     Article article = articleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     articleRepository.delete(article);
     return true;
+  }
+
+  @Transactional
+  public boolean viewCountInc(Long id, HttpServletRequest request, HttpServletResponse response){
+    Cookie oldCookie = null;
+    Cookie[] cookies = request.getCookies();
+    int result = 0;
+
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("postView")) {
+          oldCookie = cookie;
+        }
+      }
+    }
+
+    if (oldCookie != null) {
+      if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+        result = articleRepository.viewCountUp(id);
+        oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+        oldCookie.setPath("/");
+        oldCookie.setMaxAge(60 * 60 * 24);
+        response.addCookie(oldCookie);
+      }
+    } else {
+      result = articleRepository.viewCountUp(id);
+      Cookie newCookie = new Cookie("postView","[" + id + "]");
+      newCookie.setPath("/");
+      newCookie.setMaxAge(60 * 60 * 24);
+      response.addCookie(newCookie);
+    }
+
+    return result > 0;
   }
 }
