@@ -12,8 +12,13 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -187,5 +192,31 @@ public class LoginService {
             e.printStackTrace();
         }
         return kakaoMember;
+    }
+
+    public boolean logout(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        // headers.setBearerAuth(accessToken); // 액세스 토큰을 Authorization 헤더에 넣어 보냅니다.
+        String kakaoLogoutUrl = "https://kapi.kakao.com/v1/user/logout";
+        // RestTemplate을 사용하여 HTTP 요청을 보냅니다.
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        // 카카오 API 호출 결과를 받습니다.
+        ResponseEntity<String> response = restTemplate.exchange(
+                kakaoLogoutUrl,
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+        System.out.println(response);
+        if (response != null) {
+            System.out.println("끝");
+            return true;
+        } else {
+            System.out.println("끝");
+            return false;
+        }
     }
 }

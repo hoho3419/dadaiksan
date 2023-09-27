@@ -33,7 +33,7 @@ public class AdminController {
     /**
      * 이벤트
      */
-    @PostMapping("event-write")
+    @PostMapping("/event-write")
     public ResponseEntity<?> newEvent(@RequestBody EventDto eventDto, HttpServletRequest request, @AuthenticationPrincipal UserDetails userDetails) throws ParseException {
         boolean isCreate = eventService.newEvent(eventDto, request, userDetails);
 
