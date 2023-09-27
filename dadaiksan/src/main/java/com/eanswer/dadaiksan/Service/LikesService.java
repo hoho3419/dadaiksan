@@ -22,6 +22,7 @@ public class LikesService {
     Member member = authService.validateTokenAndGetUser(request,userDetails);
     System.out.println(member.getId());
     int a = likesRepository.likesToggle(id,member.getId());
+
     return true;
   }
 }

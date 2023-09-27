@@ -21,7 +21,12 @@ const TestApi = {
             nickname : nickName
         };
         return await axios.post(domain + "/auth/signup", member);
-    }
+    },
+
+    // 카카오
+   
+
+    
 }
 
 export default TestApi;
