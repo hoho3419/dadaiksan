@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -31,6 +31,12 @@ public class ArticleController {
   public ResponseEntity<ArticleDto> readArticle(@PathVariable Long id, HttpServletRequest request,@AuthenticationPrincipal UserDetails userDetails){
     ArticleDto articleDto = articleService.readArticle(id,request,userDetails);
     return new ResponseEntity<>(articleDto,HttpStatus.OK);
+  }
+
+  @GetMapping("/read/{id}/view-count") // 조회수 올리기
+  public ResponseEntity<?> articleViewInc(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response){
+    boolean isSuccess = articleService.viewCountInc(id,request,response);
+    return new ResponseEntity<>(isSuccess,HttpStatus.OK);
   }
 
 }
