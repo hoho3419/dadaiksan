@@ -24,6 +24,6 @@ public class Likes {
     private Article article;
     
     @OneToOne
-    @JoinColumn(name = "Member",unique = true)
+    @JoinColumn(name = "Member")
     private Member member;
 }

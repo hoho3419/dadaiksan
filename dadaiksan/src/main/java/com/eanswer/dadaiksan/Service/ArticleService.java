@@ -41,7 +41,7 @@ public class ArticleService {
 
     for (Object[] arr : articles) {
       ArticleDto articleDto = new ArticleDto();
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
 
       Long id = arr[0] != null ? Long.valueOf(arr[0].toString()) : null;
       String Type = arr[1] != null ? (String)arr[1] : null;
@@ -67,7 +67,7 @@ public class ArticleService {
       articleDto.setUpdateDate(updateDate.orElse(null));
       articleDto.setVidUrl(vidUrl);
       articleDto.setViewCount(viewCount);
-      articleDto.setLikeCount(likeCount);
+      articleDto.setLikeCounts(likeCount);
 
       articleDtos.add(articleDto);
     }
