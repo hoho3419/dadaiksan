@@ -20,22 +20,6 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
       "WHERE a.id = :articleId AND m.id = :memberId")
   String findByArticleAndLikes(@Param("articleId") Long articleId,@Param("memberId") Long memberId);
 
-  @Query(value = "SELECT a.article_id, " +
-      "a.article_type, " +
-      "a.contents, " +
-      "a.img_url, " +
-      "a.reg_date, " +
-      "a.status, " +
-      "a.title, " +
-      "a.update_date, " +
-      "a.vid_url, " +
-      "a.view_count, " +
-      "COUNT(CASE WHEN l.status = 1 THEN l.article ELSE NULL END) AS like_counts " +
-      "FROM Article a " +
-      "LEFT JOIN Likes l ON a.article_id = l.article " +
-      "GROUP BY a.article_id",nativeQuery = true)
-  List<Object[]> findByAllArticleAndLikes();
-
   @Modifying
   @Query("UPDATE Article a SET a.viewCount = a.viewCount + 1 WHERE a.id = :articleId")
   int viewCountUp(@Param("articleId") Long articleId);

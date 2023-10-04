@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class ArticleDto {
     private Long id;
     private int viewCount = 0;
-    private BigInteger likeCounts;
+    private Long likeCounts;
     private String articleType;
     private String title;
     private String contents;
