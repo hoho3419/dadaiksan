@@ -72,6 +72,8 @@ public class AuthService {
     public TokenDto login(MemberRequestDto memberRequestDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+        System.out.println("authenticationToken*********");
+        System.out.println(authenticationToken);
         // 2. 실제로 검증 (사용자 비밀번호 체크) 이 이루어지는 부분
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
