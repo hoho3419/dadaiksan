@@ -20,4 +20,4 @@
 * Swagger 를 통해서 간편하게 문서관리
 
 ## Swagger
-![image](https://github.com/hoho3419/hshop/assets/106577276/47959f68-8bdd-494c-95f2-9fb6c439d311)
+![sw](https://github.com/hoho3419/dadaiksan/assets/106577276/4df8f08f-6ba8-4d8d-ab31-4316d5da144b)
